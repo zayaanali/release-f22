@@ -23,7 +23,7 @@ TEST_CASE("A basic StickerSheet works", "[weight=5][part=2][timeout=30000][valgr
 
   StickerSheet sheet(alma, 5);
   sheet.addSticker(i, 20, 200);
-
+  
   Image expected;
   expected.readFromFile("../tests/expected.png");
 
@@ -73,6 +73,7 @@ TEST_CASE("StickerSheet::changeMaxStickers() can increase the number of stickers
 
   Image expected;
   expected.readFromFile("../tests/expected-2.png");
+  
 
   REQUIRE( sheet.render() == expected );
 }
