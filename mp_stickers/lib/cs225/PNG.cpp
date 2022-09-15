@@ -24,7 +24,7 @@ using std::vector;
 #include "RGB_HSL.h"
 
 
-namespace cs225 {
+namespace cs225 {  
   void PNG::_copy(PNG const & other) {
     // Clear self
     delete[] imageData_;
