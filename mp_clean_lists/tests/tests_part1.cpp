@@ -67,7 +67,7 @@ TEST_CASE("List::triplerotate basic", "[weight=5][part=1][valgrind]") {
 TEST_CASE("List::triplerotate simple", "[weight=10][part=1][valgrind]") {
     List<int> list;
 
-    for (int i = 1; i <= 6; i++)
+    for (int i = 1; i <= 8; i++)
         list.insertBack(i);
 
     list.tripleRotate();
@@ -76,7 +76,9 @@ TEST_CASE("List::triplerotate simple", "[weight=10][part=1][valgrind]") {
 
     list.print(s);
 
-    REQUIRE("< 2 3 1 5 6 4 >" == s.str());
+    //REQUIRE("< 2 3 1 5 6 4 >" == s.str());
+    REQUIRE(  "< 2 3 1 5 6 4 7 8 >" == s.str());
+    //REQUIRE("< 1 3 2 >" == s.str());
 }
 
 TEST_CASE("List::split simple", "[weight=5][part=1][valgrind]") {
@@ -86,7 +88,6 @@ TEST_CASE("List::split simple", "[weight=5][part=1][valgrind]") {
     list.insertBack(2);
     list.insertBack(3);
     list.insertBack(4);
-
     List<int> slist = list.split(2);
     stringstream s1, s2;
 
@@ -251,5 +252,3 @@ TEST_CASE("List::ListIterator::end is not ::begin in a non-empty list", "[weight
 
     REQUIRE( (bool)(list.begin() != list.end()) );
 }
-
-

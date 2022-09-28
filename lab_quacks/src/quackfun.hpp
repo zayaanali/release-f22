@@ -27,13 +27,18 @@ namespace QuackFun {
  *          stack in the same state (unchanged).
  */
 template <typename T>
-T sum(stack<T>& s)
-{
+T sum(stack<T>& s) {
 
-    // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
-                // Note: T() is the default value for objects, and 0 for
-                // primitive types
+    if (s.empty()) return 0;
+
+    double x = s.top();
+    s.pop();
+    double totSum = x + sum(s);
+    s.push(x);
+    
+
+    return totSum;
+
 }
 
 /**
@@ -55,8 +60,26 @@ T sum(stack<T>& s)
  */
 bool isBalanced(queue<char> input)
 {
+    if (input.size() == 0) { return true; }
+    stack<char> s;
 
-    // @TODO: Make less optimistic
+    for (unsigned i = 0; i < input.size(); i++) {
+        if (input.front() == '[') {
+            s.push('[');
+        }
+        if (input.front() == ']') {
+            if (s.size() == 0) { return false; }
+            if (s.top() == '[') {
+                s.pop();
+            }
+            else {
+                return false;
+            }
+        }
+        input.push(input.front());
+        input.pop();
+    }
+    if (s.size() != 0) { return false; }
     return true;
 }
 
@@ -78,9 +101,30 @@ bool isBalanced(queue<char> input)
 template <typename T>
 void scramble(queue<T>& q)
 {
+    queue<T> temp;
     stack<T> s;
-    // optional: queue<T> q2;
-
-    // Your code here
+    unsigned counter = 1;
+    while (!(q.empty())) {
+        if (counter % 2 == 0) {
+            if (q.size() < counter) { counter = q.size(); }
+            for (unsigned i = 0; i < counter; i++) {
+                s.push(q.front());
+                q.pop();
+            }
+            for (unsigned i = 0; i < counter; i++) {
+                temp.push(s.top());
+                s.pop();
+            }
+        }
+        else {
+            if (q.size() < counter) { counter = q.size(); }
+            for (unsigned i = 0; i < counter; i++) {
+                temp.push(q.front());
+                q.pop();
+            }
+        }
+        counter++;
+    }
+    q = temp;
 }
 }

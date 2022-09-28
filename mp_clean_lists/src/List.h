@@ -105,6 +105,7 @@ class List {
      * @param os Output stream to print the list to (e.g. cout)
      */
     void print(ostream& os = std::cout) const;
+    void printReverse(ostream& os = std::cout) const;
 
     /**
      * Determines if the current List is empty.
@@ -259,6 +260,7 @@ class List {
      *  sequence to be reversed.
      */
     void reverse(ListNode*& startPoint, ListNode*& endPoint);
+    void swapPointers(ListNode *&nodeA, ListNode *&nodeB, int z);
 
     /**
      * Helper function to split a sequence of linked memory at the node
@@ -274,6 +276,7 @@ class List {
      * @return The starting node of the sequence that was split off.
      */
     ListNode* split(ListNode* start, int splitPoint);
+    ListNode* findNth(int n);
 
     /**
      * Helper function to merge two **sorted** and **independent**
@@ -286,6 +289,7 @@ class List {
      * @param second The starting node of the second sequence.
      * @return The starting node of the resulting, sorted sequence.
      */
+    void insertNode(ListNode *previous, ListNode *newNode);
     ListNode* merge(ListNode* first, ListNode* second);
 
     /**
