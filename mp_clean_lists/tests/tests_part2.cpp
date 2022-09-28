@@ -15,6 +15,40 @@
 using namespace cs225;
 
 
+TEST_CASE("List::reverse simple", "[weight=5][part=2]") {
+  List<int> list;
+
+    for (int i = 1; i <= 2; i++)
+        list.insertBack(i);
+
+    list.reverse();
+
+    stringstream s;
+
+    list.print(s);
+
+    REQUIRE("< 2 1 >" == s.str());
+    //REQUIRE("< 7 9 8 4 6 5 1 3 2 >" == s.str());
+    //REQUIRE("< 1 3 2 >" == s.str());
+}
+
+TEST_CASE("List::reverseNth simple", "[weight=5][part=2]") {
+  List<int> list;
+
+    for (int i = 1; i <= 9; i++)
+        list.insertBack(i);
+
+    list.reverseNth(3);
+
+    stringstream s;
+
+    list.print(s);
+
+    REQUIRE("< 3 2 1 6 5 4 9 8 7 >" == s.str());
+    //REQUIRE("< 7 9 8 4 6 5 1 3 2 >" == s.str());
+    //REQUIRE("< 1 3 2 >" == s.str());
+}
+
 TEST_CASE("List::reverse", "[weight=5][part=2]") {
   PNG in;        in.readFromFile("../tests/alma.png");
   PNG expected;  expected.readFromFile("../tests/expected-reverse.png");
@@ -55,6 +89,30 @@ TEST_CASE("List::reverseNth #2", "[weight=5][part=2]") {
 
   REQUIRE( out == expected );
 }
+/*
+TEST_CASE("List::merge simple", "[weight=5][part=2]") {
+  List<int> list;
+  List<int> list2;
+
+    //for (int i = 1; i <= 7; i+=1) list.insertBack(i);
+    //for (int i = 10; i <= 15; i+=1) list2.insertBack(i);
+
+    list.insertBack(2);
+    //list.insertBack();
+    list2.insertBack(2);
+
+
+
+    list.mergeWith(list2);
+
+    stringstream s;
+
+    list.print(s);
+
+    REQUIRE("< 1 1 1 1 >" == s.str());
+    //REQUIRE("< 7 9 8 4 6 5 1 3 2 >" == s.str());
+    //REQUIRE("< 1 3 2 >" == s.str());
+}*/
 
 
 TEST_CASE("List::merge", "[weight=10][part=2][valgrind]") {

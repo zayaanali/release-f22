@@ -134,6 +134,17 @@ void List<T>::print(ostream& os) const {
     os << " >";
 }
 
+template <class T>
+void List<T>::printReverse(ostream& os) const {
+    os << "<";
+    ListNode* curr = tail_;
+    while (curr != NULL) {
+        os << " " << curr->data;
+        curr = curr->prev;
+    }
+    os << " >";
+}
+
 // overloaded operator<<
 template <class T>
 ostream& operator<<(ostream& os, const List<T>& list) {

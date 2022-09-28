@@ -20,10 +20,11 @@
  * @param n The number to sum the digits of
  * @return  The sum of its digits
  */
-int RecursionExercises::sumDigits(int n)
-{
+int RecursionExercises::sumDigits(int n) {
+            
+        if (n / 10 == 0) return n;
+        return n%10 + sumDigits(n/10);
 
-    return -1;
 }
 
 /**
@@ -43,8 +44,9 @@ int RecursionExercises::sumDigits(int n)
  * @param rows The number of horizontal rows in the triangle
  * @return     The total number of blocks in the triangle pyramid
  */
-int RecursionExercises::triangle(int rows)
-{
+int RecursionExercises::triangle(int rows) {
+    if (rows == 0) return 0;
 
-    return -1;
+    return rows+triangle(rows-1);
+
 }
