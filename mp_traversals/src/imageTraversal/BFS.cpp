@@ -24,14 +24,36 @@ using namespace cs225;
  */
 BFS::BFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
+
+  // initialize private vars
+  png_ = png;
+  start_ = start;
+  tolerance_ = tolerance;
+  height_ = png_.height();
+  width_ = png.width();
+  // resize visited to size of the entire png, init all to false
+  unsigned int size = (png_.width()*png_.height());
+  visited_.resize(height_, vector<bool>(width_, false));
+
+  // go to first element and set as visited
+  queue_.push(start);
+  visited_[start.x][start.y] = true;
+
 }
+
+
+
+
 
 /**
  * Returns an iterator for the traversal starting at the first point.
  */
 ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
+
+  //BFS *bfs = new BFS(png_, start, tolerance);
+  //ImageTraversal::Iterator(*bfs, start_);
+  //return bfs;
 }
 
 /**
@@ -39,6 +61,7 @@ ImageTraversal::Iterator BFS::begin() {
  */
 ImageTraversal::Iterator BFS::end() {
   /** @todo [Part 1] */
+
   return ImageTraversal::Iterator();
 }
 
