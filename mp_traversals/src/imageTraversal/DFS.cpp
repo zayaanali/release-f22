@@ -12,6 +12,12 @@
 #include "ImageTraversal.h"
 #include "DFS.h"
 
+
+  // recursive fn takes index of node, and visited array
+  // mark node as visited, print node
+  // traverse all adjacent and unmarked nodes
+  // call recursive function with index of adjacent node
+
 /**
  * Initializes a depth-first ImageTraversal on a given `png` image,
  * starting at `start`, and with a given `tolerance`.
@@ -23,6 +29,18 @@
  */
 DFS::DFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
+  png_ = png;
+  start_ = start;
+  tolerance = tolerance_;
+  
+  height_ = png.height();
+  width_ = png.width();
+  visited_.resize(height_, vector<bool>(width_, false)); // set all values to false
+
+  // go to first element and set as visited
+  stack_.push(start); // push 
+  visited_[start.x][start.y] = true;
+
 }
 
 /**
