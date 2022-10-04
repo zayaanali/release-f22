@@ -98,6 +98,7 @@ class BST
      * @return The value stored for that key
      */
     V find(const K& key);
+    //V find(Node* & subtree,const K& key)
 
     /**
      * Prints the function calls to a stream.
@@ -160,6 +161,8 @@ class BST
      * @return A BST<K, V>::Node* & object pointing to the matching node
      */
     struct BST<K, V>::Node* &  find(Node*& node, const K& key);
+    struct BST<K, V>::Node* &  findIOP(Node*& node);
+    struct BST<K, V>::Node* &  findParent(Node*& node, const K& key);
 
     /**
     * Private helper function for the public height function.
