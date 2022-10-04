@@ -24,7 +24,7 @@ using namespace cs225;
 class ImageTraversal {
 public:
   /**
-   * A forward iterator through an ImageTraversal.
+   * A forward iterator through an ImageTraversal. 
    */
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
@@ -36,10 +36,15 @@ public:
 
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
+    Iterator(PNG png, ImageTraversal *traversal, Point point, double tolerance);
 
   private:
     /** @todo [Part 1] */
     /** add private members here if neccesary*/
+    ImageTraversal *traversal_;
+    Point curPoint_;
+    PNG png_;
+    double tolerance_;
 
   };
 
@@ -75,7 +80,13 @@ public:
    * Virtual function. Derived class need to implement this
    */
   virtual bool empty() const = 0;
+  
+  virtual bool getVisited(unsigned x, unsigned y) = 0;
+  virtual void setVisited(unsigned x, unsigned y) = 0;
 
 private:
+  //ImageTraversal *traversal_;
+  //Point startPoint_;
+  //Point curPoint_;  
   static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  
 };

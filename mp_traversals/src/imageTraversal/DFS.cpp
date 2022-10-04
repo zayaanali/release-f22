@@ -27,11 +27,18 @@
  * @param tolerance If the current point is too different (difference larger than tolerance) with the start point,
  * it will not be included in this DFS
  */
+
+/*
+* create recursive function takes index of node and visited array
+* mark current node as visited and print node
+* traverse all adjacent and unmarked nodes, call recursive function with index of adjacent node
+*/
 DFS::DFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
+  // set vars
   png_ = png;
   start_ = start;
-  tolerance = tolerance_;
+  tolerance_ = tolerance;
   
   height_ = png.height();
   width_ = png.width();
@@ -48,7 +55,10 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
  */
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
-  return ImageTraversal::Iterator();
+  // create and return iterator
+  DFS *dfs = new DFS(png_, start_, tolerance_);
+  ImageTraversal::Iterator it(png_, dfs, start_, tolerance_);
+  return it;
 }
 
 /**
@@ -64,6 +74,7 @@ ImageTraversal::Iterator DFS::end() {
  */
 void DFS::add(const Point & point) {
   /** @todo [Part 1] */
+  stack_.push(point);
 }
 
 /**
@@ -71,7 +82,10 @@ void DFS::add(const Point & point) {
  */
 Point DFS::pop() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  if (stack_.empty()) 
+    { return Point(-1,-1); }
+  else 
+    { Point ret= stack_.top(); stack_.pop(); return ret; }
 }
 
 /**
@@ -79,13 +93,23 @@ Point DFS::pop() {
  */
 Point DFS::peek() const {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  if (stack_.empty()) 
+    { return Point(-1,-1); }
+  else 
+    { Point ret= stack_.top(); return ret; }
 }
 
+bool DFS::getVisited(unsigned x, unsigned y) {
+    return visited_[x][y];
+}
+void DFS::setVisited(unsigned x, unsigned y) {
+    visited_[x][y] = true;
+}
 /**
  * Returns true if the traversal is empty.
  */
 bool DFS::empty() const {
   /** @todo [Part 1] */
-  return true;
+  if (stack_.empty()) return false;
+  else return true;
 }

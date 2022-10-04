@@ -22,6 +22,13 @@ using namespace cs225;
  * @param tolerance If the current point is too different (difference larger than tolerance) with the start point,
  * it will not be included in this BFS
  */
+
+
+/*
+* declare queue and insert starting vertex. 
+* Init visited array and mark starting point as visited
+* Remove first queue member and mark as visited. Insert all unvisited neighbors into queue
+*/
 BFS::BFS(const PNG & png, const Point & start, double tolerance) {  
   /** @todo [Part 1] */
 
@@ -32,7 +39,6 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
   height_ = png_.height();
   width_ = png.width();
   // resize visited to size of the entire png, init all to false
-  unsigned int size = (png_.width()*png_.height());
   visited_.resize(height_, vector<bool>(width_, false));
 
   // go to first element and set as visited
@@ -51,9 +57,9 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
 ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */
 
-  //BFS *bfs = new BFS(png_, start, tolerance);
-  //ImageTraversal::Iterator(*bfs, start_);
-  //return bfs;
+  BFS *bfs = new BFS(png_, start_, tolerance_);
+  return ImageTraversal::Iterator(png_, bfs, start_, tolerance_);
+
 }
 
 /**
@@ -61,8 +67,7 @@ ImageTraversal::Iterator BFS::begin() {
  */
 ImageTraversal::Iterator BFS::end() {
   /** @todo [Part 1] */
-
-  return ImageTraversal::Iterator();
+  return ImageTraversal::Iterator(); // return -1,-1
 }
 
 /**
@@ -70,6 +75,7 @@ ImageTraversal::Iterator BFS::end() {
  */
 void BFS::add(const Point & point) {
   /** @todo [Part 1] */
+  queue_.push(point);
 }
 
 /**
@@ -77,7 +83,10 @@ void BFS::add(const Point & point) {
  */
 Point BFS::pop() {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  if (queue_.empty()) 
+    { return Point(-1,-1); }
+  else 
+    { Point ret = queue_.front(); queue_.pop(); return ret; }
 }
 
 /**
@@ -85,13 +94,25 @@ Point BFS::pop() {
  */
 Point BFS::peek() const {
   /** @todo [Part 1] */
-  return Point(0, 0);
+  if (queue_.empty())
+    { return Point(-1,-1); }
+  else 
+    { return queue_.front(); }
+ 
 }
+bool BFS::getVisited(unsigned x, unsigned y) {
+    return visited_[x][y];
+}
+void BFS::setVisited(unsigned x, unsigned y) {
+    visited_[x][y] = true;
+}
+
 
 /**
  * Returns true if the traversal is empty.
  */
 bool BFS::empty() const {
   /** @todo [Part 1] */
-  return true;
+  if (queue_.empty()) return true;
+  else return false;
 }

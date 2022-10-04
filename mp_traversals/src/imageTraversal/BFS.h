@@ -32,6 +32,8 @@ public:
   Point pop();
   Point peek() const;
   bool empty() const;
+  bool getVisited(unsigned x, unsigned y);
+  void setVisited(unsigned x, unsigned y);
 
 private:
   /** @todo [Part 1] */
@@ -40,7 +42,7 @@ private:
   PNG png_;
   Point start_;
   vector<vector<bool>> visited_;
-  list<Point> queue_; 
+  queue<Point> queue_; 
   unsigned int height_;
   unsigned int width_;
 

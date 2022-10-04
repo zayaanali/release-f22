@@ -32,6 +32,8 @@ public:
   Point pop();
   Point peek() const;
   bool empty() const;
+  bool getVisited(unsigned x, unsigned y);
+  void setVisited(unsigned x, unsigned y);
 
 private:
 	/** @todo [Part 1] */
@@ -43,6 +45,5 @@ private:
   stack<Point> stack_; 
   unsigned int height_;
   unsigned int width_;
-  unsigned int height_;
 
 };
