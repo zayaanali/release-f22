@@ -43,8 +43,10 @@ public:
     /** add private members here if neccesary*/
     ImageTraversal *traversal_;
     Point curPoint_;
+    Point start_;
     PNG png_;
     double tolerance_;
+
 
   };
 

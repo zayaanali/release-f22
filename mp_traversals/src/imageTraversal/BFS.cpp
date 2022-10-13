@@ -39,7 +39,7 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
   height_ = png_.height();
   width_ = png.width();
   // resize visited to size of the entire png, init all to false
-  visited_.resize(height_, vector<bool>(width_, false));
+  visited_.resize(width_, vector<bool>(height_, false));
 
   // go to first element and set as visited
   queue_.push(start);
@@ -57,8 +57,8 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
 ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */
 
-  BFS *bfs = new BFS(png_, start_, tolerance_);
-  return ImageTraversal::Iterator(png_, bfs, start_, tolerance_);
+  //BFS *bfs = new BFS(png_, start_, tolerance_);
+  return ImageTraversal::Iterator(png_, this, start_, tolerance_);
 
 }
 

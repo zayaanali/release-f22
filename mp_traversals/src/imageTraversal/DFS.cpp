@@ -42,7 +42,7 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
   
   height_ = png.height();
   width_ = png.width();
-  visited_.resize(height_, vector<bool>(width_, false)); // set all values to false
+  visited_.resize(width_, vector<bool>(height_, false)); // set all values to false
 
   // go to first element and set as visited
   stack_.push(start); // push 
@@ -56,8 +56,8 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
 ImageTraversal::Iterator DFS::begin() {
   /** @todo [Part 1] */
   // create and return iterator
-  DFS *dfs = new DFS(png_, start_, tolerance_);
-  ImageTraversal::Iterator it(png_, dfs, start_, tolerance_);
+  //DFS *dfs = new DFS(png_, start_, tolerance_);
+  ImageTraversal::Iterator it(png_, this, start_, tolerance_);
   return it;
 }
 
@@ -110,6 +110,6 @@ void DFS::setVisited(unsigned x, unsigned y) {
  */
 bool DFS::empty() const {
   /** @todo [Part 1] */
-  if (stack_.empty()) return false;
-  else return true;
+  if (stack_.empty()) return true;
+  else return false;
 }
