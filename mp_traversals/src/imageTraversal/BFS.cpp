@@ -58,7 +58,7 @@ ImageTraversal::Iterator BFS::begin() {
   /** @todo [Part 1] */
 
   //BFS *bfs = new BFS(png_, start_, tolerance_);
-  return ImageTraversal::Iterator(png_, this, start_, tolerance_);
+  // return ImageTraversal::Iterator(png_, this, start_, tolerance_);
 
 }
 
