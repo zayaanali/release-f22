@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <vector>
 #include <math.h>
+#include <stdlib.h>
 using namespace std;
 
 template <int Dim>
@@ -119,22 +120,27 @@ KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
   /**
    * @todo Implement this function!
    */
-  // copy(root, other);
+  copy(this->root, other->root);
+  size=other.size;
 
 }
 
 template <int Dim>
 void KDTree<Dim>::copy(KDTreeNode *&newRoot, const KDTree<Dim> *&other) {
-  // if (other==NULL) return;
+  if (other==NULL) return;
 
-  // newRoot = new KDTreeNode(other->point);
-  // copy(newRoot->left, other->left);
-  // copy(newRoot->right, other->right);
+  newRoot = new KDTreeNode(other->point);
+  copy(newRoot->left, other->left);
+  copy(newRoot->right, other->right);
 }
 
 template <int Dim>
 void KDTree<Dim>::deleteTree(KDTreeNode *&root) {
   // delete root;
+  if (root==NULL) return;
+  delete(root->left);
+  delete(root->right);
+  delete root;
 }
 
 
@@ -143,7 +149,8 @@ const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
   /**
    * @todo Implement this function!
    */
-
+  delete(root);
+  copy(root, rhs.root);
   return *this;
 }
 
@@ -152,15 +159,42 @@ KDTree<Dim>::~KDTree() {
   /**
    * @todo Implement this function!
    */
+  deleteTree(root);
 }
 
 template <int Dim>
 Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 {
-    /**
-     * @todo Implement this function!
-     */
+    if (root==NULL) return root;
 
-    return Point<Dim>();
 }
+template <int Dim>
+Point<Dim> KDTree<Dim>::findNeighbor(const Point<Dim>& query, int dim, KDTreeNode *curRoot, KDTreeNode *curBest) const
+{
+    if (root==NULL) return root;
+    
+    Point<Dim> &nearest;
+    KDTreeNode left=curRoot->left;
+    KDTreeNode right=curRoot->right;
+    int leftDist = abs(query[dim]-curRoot->left.point[dim]);
+    int rightDist = abs(query[dim]-curRoot->right.point[dim]);
+    // compare query and current
+    
+    if (leftDist<rightDist)
+      nearest = findNeighbor(query,(dim+1)%Dim, curRoot->left)
+    else 
+      nearest = findNeighbor(query,(dim+1)%Dim, curRoot->right);
 
+    if (shouldReplace(query, curBest->point, nearest))
+      curBest.point = nearest;
+
+    double radius = getDistance(query, nearest);
+    // radius = radius*radius; //square the distance?
+    
+
+
+    
+
+    
+
+}
