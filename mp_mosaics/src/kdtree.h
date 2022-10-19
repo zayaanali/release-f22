@@ -22,6 +22,7 @@ using std::string;
 using std::ostream;
 using std::cout;
 using std::endl;
+using std::swap;
 
 /**
  * KDTree class: implemented using Points in Dim dimensional space (given
@@ -155,8 +156,10 @@ class KDTree
      * @param newPoints The vector of points to build your KDTree off of.
      */
     KDTree(const vector<Point<Dim>>& newPoints);
-
-
+    
+    int partition(vector<Point<Dim>>& list, int left, int right, int pivotIndex, int dimension);
+    Point<Dim> select(vector<Point<Dim>>& list, int left, int right, int k, int dimension);
+    void buildTree(vector<Point<Dim>> &points, int dimension, int left, int right, KDTreeNode *&curRoot);
     /**
      * Copy constructor for KDTree.
      *

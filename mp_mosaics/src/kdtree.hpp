@@ -51,12 +51,66 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
       return (d2<d1);
 }
 
+
+template <int Dim>
+int KDTree<Dim>::partition(vector<Point<Dim>>& list, int left, int right, int pivotIndex, int dimension) {
+  Point<Dim> pivotValue = list[pivotIndex];
+  swap(list[pivotIndex], list[right]);
+  int storeIndex = left;
+
+  for (int i=0; i<right-1; i++) {
+    if (smallerDimVal(list[i], pivotValue, dimension)) {
+      swap(list[storeIndex], list[i]);
+      storeIndex++;
+    }
+  }
+  swap(list[right], list[storeIndex]);
+  return storeIndex;
+}
+
+// find kth smallest element
+template <int Dim>
+Point<Dim> KDTree<Dim>::select(vector<Point<Dim>>& list, int left, int right, int k, int dimension) {
+  if (left==right) return list[left];
+
+  int pivotIndex = k; //middle
+  pivotIndex = partition(list, left, right, pivotIndex, dimension);
+
+  if (k==pivotIndex) 
+    return list[k];
+  else if (k<pivotIndex)
+    return select(list, left, pivotIndex-1, k, dimension);
+  else
+    return select(list, pivotIndex+1, right, k, dimension);
+
+
+}
+
+template <int Dim>
+void KDTree<Dim>::buildTree(vector<Point<Dim>> &points, int dimension, int left, int right, KDTreeNode *&curRoot) {
+  if (left<=right) return;
+    
+  int middle=(left+right)/2;
+  curRoot = new KDTreeNode(select(points, left, right, middle, dimension));
+  size++;
+
+  buildTree(points, (dimension+1)%Dim, left, middle-1, curRoot->left);
+  buildTree(points, (dimension+1)%Dim, middle+1, right, curRoot->right);
+
+}
+
 template <int Dim>
 KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
 {
     /**
      * @todo Implement this function!
      */
+    size=0;
+    vector<Point<Dim>> p = newPoints;
+    buildTree(p, 0, 0, p.size()-1, root);
+    
+
+
 }
 
 template <int Dim>
