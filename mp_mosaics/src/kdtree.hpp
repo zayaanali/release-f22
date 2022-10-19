@@ -165,36 +165,40 @@ KDTree<Dim>::~KDTree() {
 template <int Dim>
 Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 {
-    if (root==NULL) return root;
-
+    if (root==NULL) return NULL;
+    Point<Dim> curBest = root->point;
+    Point<Dim> q = query;
+    return findNeighbor(q, 0, root);
 }
 template <int Dim>
-Point<Dim> KDTree<Dim>::findNeighbor(const Point<Dim>& query, int dim, KDTreeNode *curRoot, KDTreeNode *curBest) const
+Point<Dim> KDTree<Dim>::findNeighbor(Point<Dim>& query, int dim, KDTreeNode *curRoot) const
 {
-    if (root==NULL) return root;
-    
-    Point<Dim> &nearest;
-    KDTreeNode left=curRoot->left;
-    KDTreeNode right=curRoot->right;
-    int leftDist = abs(query[dim]-curRoot->left.point[dim]);
-    int rightDist = abs(query[dim]-curRoot->right.point[dim]);
-    // compare query and current
-    
-    if (leftDist<rightDist)
-      nearest = findNeighbor(query,(dim+1)%Dim, curRoot->left)
-    else 
+    if (root==NULL) return NULL;
+    // go to either the left or right side
+    KDTreeNode curBest = Point<Dim>();
+    Point<Dim> nearest = Point<Dim>();
+    bool dir = smallerDimVal(curRoot->left->point, query, dim);
+
+    if (dir) // go left
+      nearest = findNeighbor(query,(dim+1)%Dim, curRoot->left);
+    else // go right
       nearest = findNeighbor(query,(dim+1)%Dim, curRoot->right);
 
-    if (shouldReplace(query, curBest->point, nearest))
+    if (shouldReplace(query, curBest.point, nearest))
       curBest.point = nearest;
 
     double radius = getDistance(query, nearest);
-    // radius = radius*radius; //square the distance?
-    
-
-
-    
-
-    
+    double splitDist = curRoot->point[dim]-query[dim];
+    Point<Dim> tempNearest=Point<Dim>();
+  
+    if (radius<=splitDist) {
+      if (dir) // if had previously recursed left first
+        tempNearest = findNeighbor(query,(dim+1)%Dim, curRoot->right);
+      else
+        tempNearest = findNeighbor(query,(dim+1)%Dim, curRoot->left);
+      if (shouldReplace(query, curBest.point, tempNearest))
+        curBest.point = tempNearest;
+    }
+  return curBest.point;
 
 }
