@@ -166,6 +166,8 @@ class KDTree
      * @param other The KDTree to copy.
      */
     KDTree(const KDTree<Dim>& other);
+    void copy(KDTreeNode *&newRoot, const KDTree<Dim> *&other);
+    void deleteTree(KDTreeNode *&root);
 
     /**
      * Assignment operator for KDTree.

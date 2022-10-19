@@ -58,7 +58,7 @@ int KDTree<Dim>::partition(vector<Point<Dim>>& list, int left, int right, int pi
   swap(list[pivotIndex], list[right]);
   int storeIndex = left;
 
-  for (int i=0; i<right-1; i++) {
+  for (int i=left; i<right; i++) {
     if (smallerDimVal(list[i], pivotValue, dimension)) {
       swap(list[storeIndex], list[i]);
       storeIndex++;
@@ -88,7 +88,7 @@ Point<Dim> KDTree<Dim>::select(vector<Point<Dim>>& list, int left, int right, in
 
 template <int Dim>
 void KDTree<Dim>::buildTree(vector<Point<Dim>> &points, int dimension, int left, int right, KDTreeNode *&curRoot) {
-  if (left<=right) return;
+  if (left>right) return;
     
   int middle=(left+right)/2;
   curRoot = new KDTreeNode(select(points, left, right, middle, dimension));
@@ -106,6 +106,7 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
      * @todo Implement this function!
      */
     size=0;
+    root = NULL;
     vector<Point<Dim>> p = newPoints;
     buildTree(p, 0, 0, p.size()-1, root);
     
@@ -118,7 +119,24 @@ KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
   /**
    * @todo Implement this function!
    */
+  // copy(root, other);
+
 }
+
+template <int Dim>
+void KDTree<Dim>::copy(KDTreeNode *&newRoot, const KDTree<Dim> *&other) {
+  // if (other==NULL) return;
+
+  // newRoot = new KDTreeNode(other->point);
+  // copy(newRoot->left, other->left);
+  // copy(newRoot->right, other->right);
+}
+
+template <int Dim>
+void KDTree<Dim>::deleteTree(KDTreeNode *&root) {
+  // delete root;
+}
+
 
 template <int Dim>
 const KDTree<Dim>& KDTree<Dim>::operator=(const KDTree<Dim>& rhs) {
