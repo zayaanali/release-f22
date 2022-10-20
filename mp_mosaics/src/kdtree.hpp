@@ -173,9 +173,10 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 template <int Dim>
 Point<Dim> KDTree<Dim>::findNeighbor(Point<Dim>& query, int dim, KDTreeNode *curRoot) const
 {
-    if (root==NULL) return NULL;
+    if (curRoot==NULL) return NULL;
+    if (curRoot->right==NULL && curRoot->left==NULL) return curRoot->point;
     // go to either the left or right side
-    KDTreeNode curBest = Point<Dim>();
+    KDTreeNode curBest = *curRoot;
     Point<Dim> nearest = Point<Dim>();
     bool dir = smallerDimVal(curRoot->left->point, query, dim);
 
