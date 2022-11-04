@@ -8,6 +8,7 @@
 #include <vector>
 #include <math.h>
 #include <stdlib.h>
+#include <assert.h>
 using namespace std;
 
 template <int Dim>
@@ -25,15 +26,15 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
 }
 
 template <int Dim>
-int KDTree<Dim>::getDistance(const Point<Dim>& p1, const Point<Dim>& p2) const {
-    int tot=0;
-    int temp;
+double KDTree<Dim>::getDistance(const Point<Dim>& p1, const Point<Dim>& p2) const {
+    double tot=0;
+    double temp;
     for (int i=0; i<Dim; i++) { 
       temp = p1[i]-p2[i];
       temp=temp*temp;
       tot = temp+tot;
     }
-    return sqrt(tot);
+    return tot;
 }
 
 template <int Dim>
@@ -44,8 +45,8 @@ bool KDTree<Dim>::shouldReplace(const Point<Dim>& target,
     /**
      * @todo Implement this function!
      */
-    int d1 = getDistance(target, currentBest);
-    int d2 = getDistance(target, potential);
+    double d1 = getDistance(target, currentBest);
+    double d2 = getDistance(target, potential);
     if (d1==d2) 
       return potential<currentBest;
     else 
@@ -173,33 +174,41 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
 template <int Dim>
 Point<Dim> KDTree<Dim>::findNeighbor(Point<Dim>& query, int dim, KDTreeNode *curRoot) const
 {
-    if (curRoot==NULL) return NULL;
     if (curRoot->right==NULL && curRoot->left==NULL) return curRoot->point;
     // go to either the left or right side
-    KDTreeNode curBest = *curRoot;
-    Point<Dim> nearest = Point<Dim>();
-    bool dir = smallerDimVal(curRoot->left->point, query, dim);
+    Point<Dim> curBest = curRoot->point;
+    Point<Dim> nearest = curRoot->point;
 
-    if (dir) // go left
-      nearest = findNeighbor(query,(dim+1)%Dim, curRoot->left);
-    else // go right
-      nearest = findNeighbor(query,(dim+1)%Dim, curRoot->right);
+    // make sure that not accessing null values
+    bool dir = smallerDimVal(query, curRoot->point, dim);
 
-    if (shouldReplace(query, curBest.point, nearest))
-      curBest.point = nearest;
+    if (dir) { // go left
+      if (curRoot->left != NULL)
+        nearest = findNeighbor(query,(dim+1)%Dim, curRoot->left);
+    } else { // go right
+      if (curRoot->right != NULL)
+        nearest = findNeighbor(query,(dim+1)%Dim, curRoot->right);
+    }
+
+    if (shouldReplace(query, curBest, nearest))
+      curBest = nearest;
 
     double radius = getDistance(query, nearest);
-    double splitDist = curRoot->point[dim]-query[dim];
-    Point<Dim> tempNearest=Point<Dim>();
+    double splitDist = pow(curRoot->point[dim]-query[dim], 2);
+    Point<Dim> tempNearest=curRoot->point;
   
-    if (radius<=splitDist) {
-      if (dir) // if had previously recursed left first
-        tempNearest = findNeighbor(query,(dim+1)%Dim, curRoot->right);
-      else
-        tempNearest = findNeighbor(query,(dim+1)%Dim, curRoot->left);
-      if (shouldReplace(query, curBest.point, tempNearest))
-        curBest.point = tempNearest;
+    if (radius>=splitDist) {
+      if (dir) { // if had previously recursed left first
+        if (curRoot->right != NULL)
+          tempNearest = findNeighbor(query,(dim+1)%Dim, curRoot->right);
+      } else {
+        if (curRoot->left != NULL)
+          tempNearest = findNeighbor(query,(dim+1)%Dim, curRoot->left);
+      }
+
+      if (shouldReplace(query, curBest, tempNearest))
+        curBest = tempNearest;
     }
-  return curBest.point;
+  return curBest;
 
 }

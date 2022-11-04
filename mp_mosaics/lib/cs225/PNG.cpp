@@ -83,7 +83,8 @@ namespace cs225 {
       if (rgbaSpace1.r != rgbaSpace2.r
           || rgbaSpace1.g != rgbaSpace2.g
           || rgbaSpace1.b != rgbaSpace2.b
-          || rgbaSpace1.a != rgbaSpace2.a) { return false; }
+          || rgbaSpace1.a != rgbaSpace2.a) { 
+            return false; }
     }
 
     return true;

@@ -97,7 +97,7 @@ TEST_CASE("Creates a basic MosaicCanvas with pitch black (uofi-bw)", "[weight=5]
   PNG b(1, 1);  b.getPixel(0, 0) = greenLUVAPixel(); // green
   PNG c(1, 1);  c.getPixel(0, 0) = blueLUVAPixel(); // blue
   PNG d(1, 1);  d.getPixel(0, 0) = grayLUVAPixel(); // gray
-  PNG e(1, 1);  e.getPixel(0, 0) = whiteLUVAPixel(); // gray
+  PNG e(1, 1);  e.getPixel(0, 0) = whiteLUVAPixel(); // white
 
   tileList.push_back(TileImage(a));
   tileList.push_back(TileImage(b));

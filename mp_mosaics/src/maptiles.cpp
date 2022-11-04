@@ -24,35 +24,30 @@ MosaicCanvas* mapTiles(SourceImage const& theSource,
     // create new mosaic
     MosaicCanvas *canvas = new MosaicCanvas(theSource.getRows(), theSource.getColumns());
 
-    // traverse the entire vector tile array
-    // get each pixel, convert to xyz, store each avg pixel into vectorarray
-    // map each avg pixel to a tile
     LUVAPixel tilePixel= LUVAPixel();
     Point<3> tilePoint = Point<3>();
     vector<Point<3>> pointArray; // vector of each point
-    map<Point<3>, TileImage> tileMap;
-    for (auto it: theTiles) {
-        tilePoint = convertToXYZ(it.getAverageColor());
-        pointArray.push_back(tilePoint);
-        tileMap[tilePoint] = it;
+    map<Point<3>, TileImage*> tileMap; // maps each treepoint to tileimage
+    for (auto& it : theTiles) {
+        tilePoint = convertToXYZ(it.getAverageColor()); // get color from each tile, convert to point
+        pointArray.push_back(tilePoint); // add each point to tile point vector
+        tileMap[tilePoint] = &it; // map each tilepoint to tileimage
     }
 
-    // build kdtree with tile points
-    // for each row/col of the source image get the color of the region
-    // convert each region point to xyz
-    // find nearest neighbor point from tile kdtree
-    // set the tile on the canvas by getting the corresponding tile 
-    // from the map
+
     KDTree<3> tree(pointArray);
     for (int r=0; r<theSource.getRows(); r++) {
-        for (int c=0; c<theSource.getColumns(); c++) {
-            Point<3> color = convertToXYZ(theSource.getRegionColor(r,c));
-            Point<3> colorMatch = tree.findNearestNeighbor(color);
-            canvas->setTile(r, c, &tileMap[colorMatch]);
+        for (int c=0; c<theSource.getColumns(); c++) { // each r/c of mosaic
+            Point<3> color = convertToXYZ(theSource.getRegionColor(r,c)); // get color point from region of source image
+            Point<3> colorMatch = tree.findNearestNeighbor(color); // find closest color point match
+            if(c == 281 && r == 118){
+                std::cout << color << " " << colorMatch << std::endl;
+            }
+            canvas->setTile(r, c, (tileMap[colorMatch])); // set the tile
         }
     }
 
     // return the canvas
-    return NULL;
+    return canvas;
 }
 

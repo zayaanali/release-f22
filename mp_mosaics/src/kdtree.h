@@ -109,7 +109,7 @@ class KDTree
     bool shouldReplace(const Point<Dim>& target, const Point<Dim>& currentBest,
                        const Point<Dim>& potential) const;
     
-    int getDistance(const Point<Dim>& p1, const Point<Dim>& p2) const;
+    double getDistance(const Point<Dim>& p1, const Point<Dim>& p2) const;
 
     /**
      * Constructs a KDTree from a vector of Points, each having dimension Dim.
