@@ -1,5 +1,5 @@
 #include "maze.h"
-#include "lib/cs225/PNG.h"
+#include "cs225/PNG.h"
 #include <queue>
 
 using namespace std;
@@ -80,8 +80,8 @@ bool SquareMaze::canTravel(int x, int y , int dir) const {
     else if (dir==3) {
         if (y+1 >= height_) return false;
         return !(right_[x][y-1]);
-
     }
+    else return false;
 }
 
 void SquareMaze::setWall(int x, int y, int dir, bool exists) {
@@ -103,12 +103,13 @@ vector<int> SquareMaze::solveMaze() {
     vector<int> path(width_*height_, -1);
     // vector<vector<int>> length(height_, vector<int> (width_, -1));
     // vector<vector<int>> path(height_, vector<int> (width_, -1));
-    //vector<int> temp(width_*height_, -1);
+    vector<int> previous(width_*height_, -1);
     q.push(0);
 
     while (!q.empty()) {
         // current index being checked
         int currentIdx = q.front();
+        q.pop();
         int x = currentIdx%width_;
         int y = currentIdx/width_;
 
@@ -116,47 +117,63 @@ vector<int> SquareMaze::solveMaze() {
         if (canTravel(x,y,0) && length[currentIdx+1]==-1) {
             length[currentIdx+1] = length[currentIdx]+1;
             path[currentIdx+1]=0;
+            previous[currentIdx+1] = currentIdx;
             q.push(currentIdx+1);
         }
         // TRY DOWN
         if (canTravel(x,y,1) && length[currentIdx+width_]==-1) {
             length[currentIdx+width_] = length[currentIdx]+1;
-            path[currentIdx+1]=1;
+            path[currentIdx+width_]=1;
+            previous[currentIdx+width_]=currentIdx;
             q.push(currentIdx+width_);
         }
         // TRY LEFT
         if (canTravel(x,y,2) && length[currentIdx-1]==-1) {
             length[currentIdx-1] = length[currentIdx]+1;
             path[currentIdx-1]=2;
+            previous[currentIdx-1]=currentIdx;
             q.push(currentIdx-1);
         }
         // TRY UP
         if (canTravel(x,y,3) && length[currentIdx-width_]==-1) {
             length[currentIdx-width_] = length[currentIdx]+1;
             path[currentIdx-width_]=3;
+            previous[currentIdx-width_]=currentIdx;
             q.push(currentIdx-width_);
         }
 
         // last row heights
         int startIdx = ((height_-1)*width_);
         int curMax=0;
+        int curMaxIdx;
+        // get the maximum length on the bottom row, plus index of the element
         for (int i=startIdx; i<width_*height_; i++) {
-            if (length[i]>curMax) 
+            if (length[i]>curMax) {
                 curMax=length[i];
+                curMaxIdx=i;
+            }
         }
-        
+
+        vector<int> longestPath;
+        int pathIdx;
+        while (pathIdx != -1) {
+            
+        }
+
 
     }
 
-
+return vector<int>();
 }
 
 PNG* SquareMaze::drawMaze() {
-
+    PNG *temp = new PNG();
+return temp;
 }
 
 PNG* SquareMaze::drawMazeWithSolution() {
-
+PNG *temp = new PNG();
+return temp;
 }
 
 

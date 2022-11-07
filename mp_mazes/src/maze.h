@@ -1,10 +1,11 @@
 /* Your code here! */
 #pragma once
-#include "lib/cs225/PNG.h"
+#include "cs225/PNG.h"
 #include "dsets.h"
 #include <vector>
 
 using namespace std;
+using namespace cs225;
 
 class SquareMaze {
     public:
