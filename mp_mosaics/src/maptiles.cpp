@@ -21,9 +21,8 @@ MosaicCanvas* mapTiles(SourceImage const& theSource,
     /**
      * @todo Implement this function!
      */
-    // create new mosaic
-    MosaicCanvas *canvas = new MosaicCanvas(theSource.getRows(), theSource.getColumns());
 
+<<<<<<< HEAD
     LUVAPixel tilePixel= LUVAPixel();
     Point<3> tilePoint = Point<3>();
     vector<Point<3>> pointArray; // vector of each point
@@ -49,5 +48,8 @@ MosaicCanvas* mapTiles(SourceImage const& theSource,
 
     // return the canvas
     return canvas;
+=======
+    return NULL;
+>>>>>>> c6cd753fb54518742940eced18033be74ae46da3
 }
 
