@@ -20,6 +20,8 @@ class SquareMaze {
         DisjointSets dset_;
         int width_;
         int height_;
+        int solX_;
+        int solY_;
         vector<vector<int>> maze_;
         vector<vector<bool>> right_;
         vector<vector<bool>> down_;
