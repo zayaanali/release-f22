@@ -13,61 +13,100 @@ SquareMaze::SquareMaze() {
     height_=0;
 }
 
-void SquareMaze::makeMaze(int width, int height) {
-    // set vars
-    width_ = width;
-    height_ = height;
+// void SquareMaze::makeMaze(int width, int height) {
+//     // set vars
+//     width_ = width;
+//     height_ = height;
     
-    // add all maze squares to disjoint set
-    dset_.addelements(width_*height_);
+//     // add all maze squares to disjoint set
+//     dset_.addelements(width_*height_);
     
-    right_.resize(height);
-    down_.resize(height);
-    for (int i=0; i<height; ++i) {
-        right_[i].resize(width);
-        down_[i].resize(width);
-    }
-    // right_.resize(width_, vector<int>(height_));
-    // right_.resize(width_, vector<int>(height));
+//     right_.resize(height);
+//     down_.resize(height);
+//     for (int i=0; i<height; ++i) {
+//         right_[i].resize(width);
+//         down_[i].resize(width);
+//     }
+//     // right_.resize(width_, vector<int>(height_));
+//     // right_.resize(width_, vector<int>(height));
 
-    // init each square of maze to true
-    for (int w=0; w<width; w++) {
-        for (int h=0; h<height; h++) {
-            right_[w][h] = true;
-            down_[w][h] = true;
-        }
-    }
-    int rWidth, rHeight, rDir;
-    // until has been merged into one set
-    while (dset_.size(0)!=(width*height)) {
+//     // init each square of maze to true
+//     for (int w=0; w<width; w++) {
+//         for (int h=0; h<height; h++) {
+//             right_[w][h] = true;
+//             down_[w][h] = true;
+//         }
+//     }
+//     int rWidth, rHeight, rDir;
+//     // until has been merged into one set
+//     while (dset_.size(0)!=(width*height)) {
         
-        // generate random dir/height/width
-        rDir = rand() % 2; // down or right
-        rWidth = rand() % width_;
-        rHeight = rand() % height_;
-        //assert(rWidth>-1 && rHeight>-1);
-        int rSquare = (rHeight*width)+rWidth; // 1D index of rand square
+//         // generate random dir/height/width
+//         rDir = rand() % 2; // down or right
+//         rWidth = rand() % width_;
+//         rHeight = rand() % height_;
+//         //assert(rWidth>-1 && rHeight>-1);
+//         int rSquare = (rHeight*width)+rWidth; // 1D index of rand square
     
-        if (rDir == 0) { // RIGHT
-        // set union right if not at perimeter/not already in same set    
-            if (rWidth != (width-1)) { // not at right perimeter
-                if (dset_.find(rSquare)!=dset_.find(rSquare+1)) { // not part of same set
-                    right_[rWidth][rHeight]=false;
-                    dset_.setunion(rSquare, rSquare+1); 
-                }
-            }
-        } 
-        else if (rDir==1) { // DOWN
-        // set union down if not at perimeter/not already in same set    
-            if (rHeight!=(height-1)) {
-                if (dset_.find(rSquare)!=dset_.find(rSquare+width)) {
-                    down_[rWidth][rHeight] = false;
-                    dset_.setunion(rSquare, rSquare+width);
-                }
-            }
+//         if (rDir == 0) { // RIGHT
+//         // set union right if not at perimeter/not already in same set    
+//             if (rWidth != (width-1)) { // not at right perimeter
+//                 if (dset_.find(rSquare)!=dset_.find(rSquare+1)) { // not part of same set
+//                     right_[rWidth][rHeight]=false;
+//                     dset_.setunion(rSquare, rSquare+1); 
+//                 }
+//             }
+//         } 
+//         else if (rDir==1) { // DOWN
+//         // set union down if not at perimeter/not already in same set    
+//             if (rHeight!=(height-1)) {
+//                 if (dset_.find(rSquare)!=dset_.find(rSquare+width)) {
+//                     down_[rWidth][rHeight] = false;
+//                     dset_.setunion(rSquare, rSquare+width);
+//                 }
+//             }
+//         }
+//     }
+//     cout << "DSET SIZE: " << dset_.size(0) << " size: " << width*height;   
+// }
+
+void SquareMaze::makeMaze(int width, int height){
+  width_ = width;
+  height_ = height;
+  int mazeSize = width * height;
+  dset_.addelements(mazeSize);
+  for(int i = 0; i < mazeSize; i++){
+    right_.push_back(true);
+    left_.push_back(true);
+  }
+  //select random walls to delete without creating a cycle
+  int x, y;
+  struct timeval tv;
+  gettimeofday(&tv,NULL);
+  srand(tv.tv_usec);
+  while(mazeSets.size(0) < mazeSize){  //delete until there's only one set
+
+    x = rand() % width_;
+    y = rand() % height_;
+
+    if(rand() % 2 == 1){
+      if(x != width_ - 1){
+        if(mazeSets.find(y * width_ + x) != mazeSets.find(y * width_ + x + 1)){
+          rightWalls[y * width_ + x] = false;  //or use setWall
+          mazeSets.setunion(y * width_ + x, y * width_ + x + 1);
         }
+      }
     }
-    cout << "DSET SIZE: " << dset_.size(0) << " size: " << width*height;   
+    else{
+      if(y != height_ - 1){
+        if(mazeSets.find(y * width_ + x) != mazeSets.find(y * width_ + x + width_)){
+          setWall(x, y, 1, false);
+          mazeSets.setunion(y * width_ + x, y * width_ + x + width_);
+        }
+      }
+    }
+  }
+
 }
 
 bool SquareMaze::canTravel(int x, int y , int dir) const {
@@ -165,11 +204,13 @@ vector<int> SquareMaze::solveMaze() {
     int startIdx = ((height_-1)*width_);
     //cout << "HEIGHT: " << height_ << " WIDTH: " << width_ << " IDX: " << startIdx;
     int curMax=0;
-    int curMaxIdx;
+    int curMaxIdx=0;
     // get the maximum length on the bottom row, plus index of the element
     for (int i=startIdx; i<width_*height_; i++) {
         assert(i <2000);
+        cout << "length " << length[i];
         if (length[i]>curMax) {
+            cout << "length: " << length[i];
             curMax=length[i];
             curMaxIdx=i;
         }
