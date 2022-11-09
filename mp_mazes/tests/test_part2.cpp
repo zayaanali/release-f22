@@ -152,34 +152,22 @@ void advancePosition(int * x, int * y, int dir)
 TEST_CASE("testMakeSmallMaze", "[weight=10][part2]")
 {
     SquareMaze maze;
-    maze.makeMaze(15, 15);
-    PNG * actualOutput = maze.drawMazeWithSolution();
-    actualOutput->writeToFile("checkCycles"+ string(".png"));
-    delete actualOutput;
-    assert_maze_tree(maze, 15, 15);
-    
+    maze.makeMaze(2, 2);
+    assert_maze_tree(maze, 2, 2);
 }
 
 TEST_CASE("testMakeMazeConnected", "[weight=10][part2]")
 {
     SquareMaze maze;
     maze.makeMaze(15, 15);
-    //assert_maze_connected(maze, 15, 15);
-
-
-    PNG * actualOutput = maze.drawMazeWithSolution();
-    actualOutput->writeToFile("connectedMaze"+ string(".png"));
-    delete actualOutput;
+    assert_maze_connected(maze, 15, 15);
 }
 
 TEST_CASE("testMakeMazeAcyclic", "[weight=10][part2]")
 {
     SquareMaze maze;
     maze.makeMaze(15, 15);
-    //assert_maze_acyclic(maze, 15, 15);
-    PNG * actualOutput = maze.drawMazeWithSolution();
-    actualOutput->writeToFile("checkCycles"+ string(".png"));
-    delete actualOutput;
+    assert_maze_acyclic(maze, 15, 15);
 }
 
 TEST_CASE("testMakeMazeTree750", "[weight=10][part2][timeout=20000]")
