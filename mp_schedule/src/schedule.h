@@ -14,6 +14,7 @@
 #include <set>
 
 typedef std::vector<std::vector<std::string> > V2D; 
+using std::string;
 
 
 /**
@@ -38,6 +39,9 @@ V2D file_to_V2D(const std::string & filename);
  * @return A 2D vector of strings where each row is a course followed by all the students in the course
  */
 V2D clean(const V2D & cv, const V2D & sv);
+bool check_existence(string input, std::vector<string> array);
+std::vector<string> check_class(string cur_class, V2D students);
+bool check_duplicate (std::vector<string> arr1, std::vector<string> arr2);
 
 /**
  * Given a collection of courses and a list of available times, create a valid scheduling (if possible).
